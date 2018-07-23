@@ -1,0 +1,4 @@
+- hosts: ec2-analysis
+  remote_user: ubuntu
+  roles:
+    - ec2-analysis

@@ -1,0 +1,5 @@
+- name: Checking that anaconda is installed
+  shell: /usr/bin/test -e {{user_prefix}}/lib/anaconda3/bin/python
+  register: anaconda_installed
+  ignore_errors: True
+  changed_when: anaconda_installed.rc == 1

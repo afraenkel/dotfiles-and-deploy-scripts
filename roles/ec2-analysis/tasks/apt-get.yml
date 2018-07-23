@@ -1,0 +1,16 @@
+- name: install apt-get packages
+  apt: '{{packages}}'
+  vars:
+    packages:
+      - default-jre
+      - default-jdk
+      - emacs
+
+- name: add JAVA_HOME to bashrc
+  lineinfile:
+    path: '{{ ansible_env.HOME }}/.bashrc'
+    state: present
+    line: '{{ item }}'
+    insertbefore: BOF
+  with_items:
+    - 'export JAVA_HOME=/usr/lib/jvm/default-java'

@@ -1,0 +1,38 @@
+- name: download anaconda3
+  get_url:
+    url: "https://repo.continuum.io/archive/Anaconda3-{{conda_version}}-Linux-x86_64.sh"
+    dest: "{{bootstrap}}/Anaconda3-{{conda_version}}-Linux-x86_64.sh"
+    mode: 0775
+    validate_certs: False
+
+- name: install anaconda3
+  command: "./Anaconda3-{{conda_version}}-Linux-x86_64.sh -b -p {{user_prefix}}/lib/anaconda3"
+  args:
+    chdir: "{{bootstrap}}"
+  
+- name: Make Anaconda the default Python
+  lineinfile:
+    path: '{{ ansible_env.HOME }}/.bashrc'
+    state: present
+    line: '{{ item }}'
+    insertbefore: BOF
+  with_items:
+    - 'export PATH=$ANACONDA_HOME/bin:$PATH'
+    - 'export ANACONDA_HOME={{user_prefix}}/lib/anaconda3'
+
+- name: Update conda packages
+  command: '{{user_prefix}}/lib/anaconda3/bin/conda update -y --all'
+
+- name: Install additional conda packages
+  when: anaconda_install_packages != ''
+  command: '{{user_prefix}}/lib/anaconda3/bin/conda install -c conda-forge -y {{ anaconda_install_packages }}'
+
+- name: jupyter server | Create Unit file
+  template: src=jupyter.service.j2 dest=/lib/systemd/system/jupyter.service mode=644 owner=root group=root
+  become: yes
+  notify:
+    - reload systemctl
+
+- name: jupyter | Start jupyter
+  become: yes
+  service: name=jupyter.service state=started enabled=yes
