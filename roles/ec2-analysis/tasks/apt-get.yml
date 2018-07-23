@@ -1,5 +1,7 @@
 - name: install apt-get packages
   apt: '{{packages}}'
+  become: yes
+  update_cache: yes
   vars:
     packages:
       - default-jre

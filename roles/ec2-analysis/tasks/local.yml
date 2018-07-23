@@ -2,4 +2,4 @@
 - include: detect.yml
 - include: apt-get.yml
 - include: anaconda.yml
-  when: anaconda_installed.rc == 0
+  when: anaconda_installed.rc == 1
