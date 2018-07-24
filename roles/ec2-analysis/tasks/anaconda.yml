@@ -24,8 +24,13 @@
   command: '{{user_prefix}}/lib/anaconda3/bin/conda update -y --all'
 
 - name: Install additional conda packages
+  when: conda_forge_install_packages != ''
+  command: '{{user_prefix}}/lib/anaconda3/bin/conda install -c conda-forge -y {{ conda_forge_install_packages }}'
+
+- name: Install additional conda packages
   when: anaconda_install_packages != ''
-  command: '{{user_prefix}}/lib/anaconda3/bin/conda install -c conda-forge -y {{ anaconda_install_packages }}'
+  command: '{{user_prefix}}/lib/anaconda3/bin/conda install -y {{ anaconda_install_packages }}'
+
 
 - name: jupyter server | Create Unit file
   template: src=jupyter.service.j2 dest=/lib/systemd/system/jupyter.service mode=644 owner=root group=root

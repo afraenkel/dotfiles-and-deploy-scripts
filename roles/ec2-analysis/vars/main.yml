@@ -2,4 +2,5 @@ bootstrap: "{{ansible_user_dir}}/tmp/bootstrap"
 user_prefix: "{{ansible_user_dir}}/usr/local"
 sys_prefix: /usr/local
 conda_version: 5.2.0
-anaconda_install_packages: 'pyspark jupyterlab'
+conda_forge_install_packages: 'pyspark jupyterlab'
+anaconda_install_packages: 'r-essentials'
