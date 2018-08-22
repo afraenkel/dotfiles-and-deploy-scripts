@@ -1,12 +1,17 @@
-- name: install apt-get packages
-  apt: '{{packages}}'
+- name: Update and upgrade apt packages
   become: yes
-  update_cache: yes
-  vars:
-    packages:
-      - default-jre
-      - default-jdk
-      - emacs
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install packages
+  become: yes
+  apt: name={{item}} state=installed
+  with_items:
+       - default-jre
+       - default-jdk
+       - emacs
 
 - name: add JAVA_HOME to bashrc
   lineinfile:
